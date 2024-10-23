@@ -1,25 +1,27 @@
 package com.petclinic.practice;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
+@SpringBootTest
 class GreetingServiceTest {
 
+    private static final Logger logger = LoggerFactory.getLogger(GreetingServiceTest.class);
+
+    @Autowired
     private ApplicationContext applicationContext;
 
-    @BeforeEach
-    void setUp() {
-         applicationContext = new AnnotationConfigApplicationContext("com.petclinic");
-    }
+    @Autowired
+    private GreetingService greetingService;
 
     @Test
     void shouldGreetSuccessfully() {
-        var greetingService = applicationContext.getBean(GreetingService.class);
-
         String message = greetingService.sayHi();
         
         assertThat(message).isEqualTo("Hello John");
@@ -33,9 +35,9 @@ class GreetingServiceTest {
     @Test
     void shouldDisplayBeanDefinitions() {
         String[] beanNames = this.applicationContext.getBeanDefinitionNames();
-        System.out.println("All beans in the application context:");
+        logger.info("All beans in the application context:");
         for (String beanName : beanNames) {
-            System.out.println(beanName);
+            logger.info(beanName);
         }
     }
 }
