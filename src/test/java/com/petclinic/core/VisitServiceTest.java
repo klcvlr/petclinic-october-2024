@@ -20,6 +20,8 @@ class VisitServiceTest {
     @BeforeEach
     void setUp() {
         var visit = new Visit(null, "V01-23", LocalDate.of(2024, 10, 24), "Teeth whitening");
+        visit.setOwner(new Owner(null, "joe", "satriani", 1000.0));
+        visit.setPet(new Pet(null, "dog", "luna"));
         visitService.save(visit);
     }
 
@@ -36,4 +38,19 @@ class VisitServiceTest {
     void shouldNotFindByReferenceNumber() {
         assertThat(visitService.findByReferenceNumber("non-existing-reference")).isNull();
     }
+
+    @Test
+    void shouldFindVisitWithPet(){
+        Visit visit = visitService.findByReferenceNumber("V01-23");
+
+        assertThat(visit.getPet().getName()).isEqualTo("luna");
+    }
+
+    @Test
+    void shouldFindVisitWithOwner() {
+        Visit visit = visitService.findByReferenceNumber("V01-23");
+
+        assertThat(visit.getOwner().getFirstName()).isEqualTo("joe");
+    }
+
 }
