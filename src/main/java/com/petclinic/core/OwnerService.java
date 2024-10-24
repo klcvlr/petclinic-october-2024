@@ -1,6 +1,7 @@
 package com.petclinic.core;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class OwnerService {
@@ -15,11 +16,32 @@ public class OwnerService {
         return this.ownerRepository.findByFirstName(firstName);
     }
 
-    public void save(Owner owner){
-        this.ownerRepository.save(owner);
+    public Owner save(Owner owner){
+        return this.ownerRepository.save(owner);
     }
 
     public Owner findByFirstNameWithPets(String firstName) {
         return this.ownerRepository.findByFirstNameWithPets(firstName);
     }
+
+    @Transactional
+    public void transferFunds(Owner ownerToCredit, Owner ownerToDebit, double amount) {
+        debitAmount(ownerToDebit, amount);
+        creditAmount(ownerToCredit, amount);
+    }
+
+    private void debitAmount(Owner ownerToDebit, double amount) {
+        double ownerToDebitNewAmount = ownerToDebit.getAccountStatement() - amount;
+        if (ownerToDebitNewAmount < 0)
+            throw new RuntimeException("account value cannot be below zero");
+        ownerToDebit.setAccountStatement(ownerToDebitNewAmount);
+        this.ownerRepository.save(ownerToDebit);
+    }
+
+    private void creditAmount(Owner ownerToCredit, double amount) {
+        double ownerToCreditNewAmount = ownerToCredit.getAccountStatement() + amount;
+        ownerToCredit.setAccountStatement(ownerToCreditNewAmount);
+        this.ownerRepository.save(ownerToCredit);
+    }
+
 }
