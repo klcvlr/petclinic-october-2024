@@ -1,12 +1,25 @@
 package com.petclinic.core;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+
 import java.time.LocalDate;
 
+@Entity
 public class Visit {
+    @Id
+    @GeneratedValue
     private Integer identifiant;
+    @Column(unique = true)
     private String referenceNumber;
     private LocalDate date;
     private String purpose;
+
+    public Visit() {
+        // For JPA
+    }
 
     public Visit(Integer identifiant, String referenceNumber, LocalDate date, String purpose) {
         this.identifiant = identifiant;
