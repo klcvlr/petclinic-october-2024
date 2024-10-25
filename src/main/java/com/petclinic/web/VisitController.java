@@ -19,7 +19,8 @@ public class VisitController {
 
     @GetMapping("/{id}")
     public Visit findById(@PathVariable Integer id){
-        return visitService.findById(id).orElseThrow();
+        return visitService.findById(id);
     }
+
 
 }
