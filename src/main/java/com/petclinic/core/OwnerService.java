@@ -3,6 +3,8 @@ package com.petclinic.core;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @Service
 public class OwnerService {
 
@@ -44,4 +46,7 @@ public class OwnerService {
         this.ownerRepository.save(ownerToCredit);
     }
 
+    public Optional<Owner> findById(Integer id) {
+        return ownerRepository.findById(id);
+    }
 }
